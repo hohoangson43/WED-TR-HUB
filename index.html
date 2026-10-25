@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE WEAR - Thời Trang Hiện Đại & Phong Cách</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter & Playfair Display) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#c85a32',
+                            800: '#4a1e1b',
+                            900: '#1a1818',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+        .modal-active {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- 1. HEADER & NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100 transition-all">
+        <!-- Top Banner -->
+        <div class="bg-brand-900 text-white text-xs py-2 text-center font-medium tracking-wide">
+            ✨ GIẢM GIÁ ĐẾN 40% CHO BST MÙA HÈ - MIỄN PHÍ VẬN CHUYỂN ĐƠN TỪ 500K
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-brand-500 focus:outline-none p-2" aria-label="Mở menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center space-x-2">
+                    <span class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-brand-900">LUXE<span class="text-brand-500">WEAR</span></span>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#hero" class="text-brand-500 transition-colors">Trang Chủ</a>
+                    <a href="#shop" class="text-gray-700 hover:text-brand-500 transition-colors">Sản Phẩm</a>
+                    <a href="#about" class="text-gray-700 hover:text-brand-500 transition-colors">Về Chúng Tôi</a>
+                    <a href="#footer" class="text-gray-700 hover:text-brand-500 transition-colors">Liên Hệ</a>
+                </nav>
+
+                <!-- Header Actions (Search & Cart) -->
+                <div class="flex items-center space-x-5">
+                    <!-- Search Input (Desktop) -->
+                    <div class="relative hidden sm:block w-48 lg:w-64">
+                        <input type="text" id="search-input" placeholder="Tìm quần áo..." 
+                            class="w-full bg-gray-100 text-sm pl-9 pr-4 py-2 rounded-full border-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+                    </div>
+
+                    <!-- Cart Icon Button -->
+                    <button id="open-cart-btn" class="relative p-2 text-gray-700 hover:text-brand-500 transition-colors focus:outline-none" aria-label="Xem giỏ hàng">
+                        <i class="fa-solid fa-bag-shopping text-2xl"></i>
+                        <span id="cart-badge" class="absolute top-0 right-0 bg-brand-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar (Only visible on mobile) -->
+        <div class="sm:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <input type="text" id="mobile-search-input" placeholder="Tìm kiếm sản phẩm..." 
+                    class="w-full bg-gray-100 text-sm pl-9 pr-4 py-2 rounded-full border-none focus:ring-2 focus:ring-brand-500">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="#hero" class="block py-2 text-brand-500 font-medium border-b border-gray-50">Trang Chủ</a>
+            <a href="#shop" class="block py-2 text-gray-700 hover:text-brand-500 font-medium border-b border-gray-50">Sản Phẩm</a>
+            <a href="#about" class="block py-2 text-gray-700 hover:text-brand-500 font-medium border-b border-gray-50">Về Chúng Tôi</a>
+            <a href="#footer" class="block py-2 text-gray-700 hover:text-brand-500 font-medium">Liên Hệ</a>
+        </div>
+    </header>
+
+    <!-- 2. HERO BANNER SECTION -->
+    <section id="hero" class="relative bg-gray-900 text-white overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop" 
+                 alt="Fashion Hero Banner" 
+                 class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36 flex flex-col items-start justify-center">
+            <span class="inline-block px-3 py-1 bg-brand-500 text-white text-xs font-semibold tracking-wider uppercase rounded mb-4">Bộ Sưu Tập 2026</span>
+            <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-tight leading-tight max-w-2xl mb-6">
+                Định Hình Phong Cách Thời Trang Của Bạn
+            </h1>
+            <p class="text-base sm:text-lg text-gray-200 max-w-lg mb-8 font-light">
+                Khám phá phong cách thanh lịch, hiện đại cùng các thiết kế cao cấp phù hợp cho mọi dịp từ LUXE WEAR.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#shop" class="px-8 py-3.5 bg-brand-500 hover:bg-brand-800 text-white font-medium rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    Mua Sắm Ngay
+                </a>
+                <a href="#about" class="px-8 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-medium rounded-full transition-all">
+                    Tìm Hiểu Thêm
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MAIN SHOPPING SECTION -->
+    <main id="shop" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b border-gray-200 pb-5">
+            <div>
+                <h2 class="font-serif text-3xl font-bold text-gray-900">Sản Phẩm Mới Nhất</h2>
+                <p class="text-sm text-gray-500 mt-1">Cập nhật xu hướng thời trang hàng ngày</p>
+            </div>
+            
+            <!-- Category Filter Tabs -->
+            <div class="mt-4 md:mt-0 flex flex-wrap gap-2 text-sm" id="category-filters">
+                <button data-category="all" class="category-btn active px-4 py-2 rounded-full font-medium transition-all bg-brand-900 text-white">
+                    Tất Cả
+                </button>
+                <button data-category="ao" class="category-btn px-4 py-2 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition-all">
+                    Áo Nam/Nữ
+                </button>
+                <button data-category="quan" class="category-btn px-4 py-2 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition-all">
+                    Quần & Jeans
+                </button>
+                <button data-category="vay" class="category-btn px-4 py-2 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition-all">
+                    Váy & Đầm
+                </button>
+                <button data-category="ao-khoac" class="category-btn px-4 py-2 rounded-full font-medium text-gray-600 hover:bg-gray-100 transition-all">
+                    Áo Khoác
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar Filter Options -->
+            <aside class="w-full lg:w-64 flex-shrink-0 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 h-fit">
+                <h3 class="font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100 flex justify-between items-center">
+                    <span>Bộ Lọc Sắp Xếp</span>
+                    <i class="fa-solid fa-sliders text-brand-500 text-sm"></i>
+                </h3>
+
+                <!-- Sort By -->
+                <div class="mb-6">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 mb-2">Sắp xếp theo</label>
+                    <select id="sort-select" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-sm text-gray-700 focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="default">Mặc định</option>
+                        <option value="price-asc">Giá: Thấp đến Cao</option>
+                        <option value="price-desc">Giá: Cao đến Thấp</option>
+                        <option value="name-asc">Tên: A - Z</option>
+                    </select>
+                </div>
+
+                <!-- Price Filter Range -->
+                <div class="mb-6">
+                    <label class="block text-xs font-semibold uppercase text-gray-500 mb-2">Khoảng giá tối đa</label>
+                    <input type="range" id="price-range" min="100000" max="2000000" step="50000" value="2000000" 
+                        class="w-full accent-brand-500 cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-600 mt-2">
+                        <span>100.000đ</span>
+                        <span id="price-val" class="font-bold text-brand-500">2.000.000đ</span>
+                    </div>
+                </div>
+
+                <!-- Reset Filter Button -->
+                <button id="reset-filter-btn" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors">
+                    Đặt Lại Bộ Lọc
+                </button>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="flex-grow">
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Product Cards populated by JS -->
+                </div>
+
+                <!-- Empty State Message -->
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300">
+                    <i class="fa-solid fa-magnifying-glass text-4xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500 font-medium">Không tìm thấy sản phẩm phù hợp!</p>
+                    <button id="clear-search-btn" class="mt-3 text-sm text-brand-500 underline font-semibold">Hiện tất cả sản phẩm</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. ABOUT SECTION -->
+    <section id="about" class="bg-brand-50 py-16 mt-12 border-t border-b border-brand-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 bg-white rounded-2xl shadow-sm border border-brand-100/50">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Giao Hàng Nhanh Chóng</h3>
+                    <p class="text-sm text-gray-600">Miễn phí giao hàng cho tất cả các đơn hàng từ 500.000đ trên toàn quốc.</p>
+                </div>
+
+                <div class="p-6 bg-white rounded-2xl shadow-sm border border-brand-100/50">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Đổi Trả 30 Ngày</h3>
+                    <p class="text-sm text-gray-600">Đổi trả dễ dàng và hoàn tiền 100% nếu phát hiện sản phẩm lỗi nhà sản xuất.</p>
+                </div>
+
+                <div class="p-6 bg-white rounded-2xl shadow-sm border border-brand-100/50">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900 mb-2">Chất Lượng Thật 100%</h3>
+                    <p class="text-sm text-gray-600">Chất liệu cao cấp được kiểm định nghiêm ngặt mang lại sự tự tin cho bạn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer id="footer" class="bg-brand-900 text-gray-300 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <span class="font-serif text-2xl font-bold tracking-tight text-white mb-4 block">LUXE<span class="text-brand-500">WEAR</span></span>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                        Thương hiệu thời trang mang lại nét thanh lịch, tự tin và bắt kịp xu hướng mới nhất.
+                    </p>
+                    <div class="flex space-x-3 text-gray-400">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-tiktok text-sm"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Danh Mục</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#shop" class="hover:text-white transition-colors">Áo Sơ Mi & Polo</a></li>
+                        <li><a href="#shop" class="hover:text-white transition-colors">Quần Jeans & Kaki</a></li>
+                        <li><a href="#shop" class="hover:text-white transition-colors">Váy Dạ Hội & Đầm Công Sở</a></li>
+                        <li><a href="#shop" class="hover:text-white transition-colors">Áo Khoác & Blazer</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Hỗ Trợ Khách Hàng</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" class="hover:text-white transition-colors">Hướng dẫn chọn size</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Chính sách vận chuyển</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Chính sách đổi trả</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Câu hỏi thường gặp</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Nhận Tin Ưu Đãi</h4>
+                    <p class="text-xs text-gray-400 mb-3">Đăng ký email để nhận thông tin ưu đãi mới nhất từ chúng tôi.</p>
+                    <form onsubmit="event.preventDefault(); showToast('Đăng ký nhận tin thành công!');" class="flex flex-col gap-2">
+                        <input type="email" placeholder="Email của bạn..." required class="bg-gray-800 text-xs px-3 py-2.5 rounded text-white focus:outline-none focus:ring-1 focus:ring-brand-500">
+                        <button type="submit" class="bg-brand-500 hover:bg-brand-800 text-white text-xs font-semibold py-2.5 rounded transition-colors">Đăng Ký</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
+                <p>&copy; 2026 LUXE WEAR. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 6. SHOPPING CART DRAWER / MODAL -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden pointer-events-none">
+        <!-- Backdrop -->
+        <div id="cart-backdrop" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div id="cart-panel" class="w-screen max-w-md bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 pointer-events-auto">
+                <!-- Cart Header -->
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="font-serif text-xl font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-brand-500"></i> Giỏ Hàng
+                    </h2>
+                    <button id="close-cart-btn" class="text-gray-400 hover:text-gray-700 p-2 focus:outline-none" aria-label="Đóng giỏ hàng">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cart-items-container" class="flex-grow overflow-y-auto p-5 space-y-4">
+                    <!-- Dynamic Cart Items -->
+                </div>
+
+                <!-- Cart Footer & Checkout -->
+                <div class="p-5 border-t border-gray-100 bg-gray-50 space-y-4">
+                    <div class="flex justify-between items-center text-base font-bold text-gray-900">
+                        <span>Tổng tiền:</span>
+                        <span id="cart-total" class="text-xl text-brand-500">0đ</span>
+                    </div>
+                    <button id="checkout-btn" class="w-full py-3.5 bg-brand-500 hover:bg-brand-800 text-white rounded-full font-semibold transition-all shadow-md">
+                        Tiến Hành Thanh Toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. PRODUCT DETAIL MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="product-modal-content" class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform scale-95 transition-transform duration-300 relative p-6 sm:p-8">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center z-10" aria-label="Đóng chi tiết">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="modal-body" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamic Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. TOAST NOTIFICATION SYSTEM -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- 9. JAVASCRIPT LOGIC -->
+    <script>
+        // DATA: Product List
+        const products = [
+            {
+                id: 1,
+                name: "Áo Sơ Mi Silk Cao Cấp",
+                category: "ao",
+                price: 450000,
+                oldPrice: 600000,
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=800&auto=format&fit=crop",
+                description: "Áo sơ mi chất liệu lụa satin thoáng mát, mềm mịn, phù hợp cho cả đi làm lẫn đi chơi dự tiệc.",
+                sizes: ["S", "M", "L", "XL"],
+                inStock: true
+            },
+            {
+                id: 2,
+                name: "Quần Jeans Slim-fit Nam",
+                category: "quan",
+                price: 520000,
+                oldPrice: 650000,
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop",
+                description: "Quần jeans co giãn thoải mái, form ôm vừa vặn tôn dáng người mặc. Độ bền màu cao.",
+                sizes: ["29", "30", "31", "32"],
+                inStock: true
+            },
+            {
+                id: 3,
+                name: "Váy Đầm Dáng Xoè Elegant",
+                category: "vay",
+                price: 780000,
+                oldPrice: 950000,
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=800&auto=format&fit=crop",
+                description: "Thiết kế đầm xoè phong cách Pháp thanh lịch, tôn vòng eo và tạo đường nét nữ tính.",
+                sizes: ["S", "M", "L"],
+                inStock: true
+            },
+            {
+                id: 4,
+                name: "Áo Khoác Blazer Mùa Thu",
+                category: "ao-khoac",
+                price: 1250000,
+                oldPrice: 1500000,
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop",
+                description: "Blazer 2 lớp may chuẩn chỉnh, phong cách lịch lãm công sở hoặc dạo phố phong cách Hàn Quốc.",
+                sizes: ["M", "L", "XL"],
+                inStock: true
+            },
+            {
+                id: 5,
+                name: "Áo Polo Cotton Thoáng Mát",
+                category: "ao",
+                price: 290000,
+                oldPrice: 380000,
+                rating: 4.6,
+                image: "https://images.unsplash.com/photo-1625910513413-88210333d45c?q=80&w=800&auto=format&fit=crop",
+                description: "Áo polo chất liệu 100% Cotton thấm hút mồ hôi cực tốt, phù hợp cho ngày hè năng động.",
+                sizes: ["S", "M", "L", "XL"],
+                inStock: true
+            },
+            {
+                id: 6,
+                name: "Quần Tây Kaki Công Sở",
+                category: "quan",
+                price: 480000,
+                oldPrice: 590000,
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop",
+                description: "Quần kaki không nhăn, kiểu dáng hiện đại giúp bạn luôn chỉn chu trong môi trường làm việc.",
+                sizes: ["29", "30", "31", "32"],
+                inStock: true
+            },
+            {
+                id: 7,
+                name: "Váy Maxi Dạo Phố Mùa Hè",
+                category: "vay",
+                price: 640000,
+                oldPrice: 800000,
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=800&auto=format&fit=crop",
+                description: "Váy maxi voan bay bổng nhẹ nhàng, phù hợp cho các chuyến đi biển và chụp ảnh dạo phố.",
+                sizes: ["S", "M"],
+                inStock: true
+            },
+            {
+                id: 8,
+                name: "Áo Khoác Denim Vintage",
+                category: "ao-khoac",
+                price: 890000,
+                oldPrice: 1100000,
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?q=80&w=800&auto=format&fit=crop",
+                description: "Áo khoác bò phong cách cổ điển, bụi bặm và dễ dàng phối hợp cùng nhiều trang phục.",
+                sizes: ["M", "L", "XL"],
+                inStock: true
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let cart = [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let maxPrice = 2000000;
+        let sortBy = 'default';
+
+        // DOM ELEMENTS
+        const productGrid = document.getElementById('product-grid');
+        const emptyState = document.getElementById('empty-state');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartBackdrop = document.getElementById('cart-backdrop');
+        const cartPanel = document.getElementById('cart-panel');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartTotalEl = document.getElementById('cart-total');
+        const cartBadge = document.getElementById('cart-badge');
+        const priceRange = document.getElementById('price-range');
+        const priceVal = document.getElementById('price-val');
+        const sortSelect = document.getElementById('sort-select');
+        const productModal = document.getElementById('product-modal');
+        const productModalContent = document.getElementById('product-modal-content');
+        const modalBody = document.getElementById('modal-body');
+
+        // FORMAT CURRENCY VNĐ
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        }
+
+        // RENDER PRODUCTS
+        function renderProducts() {
+            // Filter Products
+            let filtered = products.filter(p => {
+                const matchCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchPrice = p.price <= maxPrice;
+                return matchCategory && matchSearch && matchPrice;
+            });
+
+            // Sort Products
+            if (sortBy === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortBy === 'name-asc') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            }
+
+            // Display Empty State or Product Cards
+            if (filtered.length === 0) {
+                productGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            productGrid.innerHTML = filtered.map(product => `
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
+                    <div class="relative overflow-hidden aspect-[3/4] bg-gray-100 cursor-pointer" onclick="openProductModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        ${product.oldPrice ? `
+                            <span class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">
+                                -${Math.round((1 - product.price / product.oldPrice) * 100)}%
+                            </span>
+                        ` : ''}
+                        <button onclick="event.stopPropagation(); openProductModal(${product.id})" class="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-5 flex flex-col flex-grow">
+                        <div class="flex items-center space-x-1 text-amber-400 text-xs mb-1">
+                            <i class="fa-solid fa-star"></i>
+                            <span class="font-bold text-gray-700">${product.rating}</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-1 hover:text-brand-500 transition-colors cursor-pointer" onclick="openProductModal(${product.id})">
+                            ${product.name}
+                        </h3>
+                        
+                        <div class="mt-auto pt-3 flex items-center justify-between border-t border-gray-50">
+                            <div>
+                                <span class="font-bold text-brand-500 text-base">${formatPrice(product.price)}</span>
+                                ${product.oldPrice ? `<span class="text-xs text-gray-400 line-through ml-1.5">${formatPrice(product.oldPrice)}</span>` : ''}
+                            </div>
+                            <button onclick="addToCart(${product.id})" 
+                                    class="bg-brand-50 hover:bg-brand-500 hover:text-white text-brand-500 p-2.5 rounded-xl font-medium transition-colors flex items-center justify-center">
+                                <i class="fa-solid fa-cart-plus text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // CART FUNCTIONS
+        function addToCart(productId, selectedSize = null) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const size = selectedSize || product.sizes[0];
+            const existingItem = cart.find(item => item.id === productId && item.size === size);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    size: size,
+                    quantity: 1
+                });
+            }
+
+            updateCartUI();
+            openCart();
+            showToast(`Đã thêm "${product.name}" vào giỏ hàng!`);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function changeQuantity(index, delta) {
+            if (cart[index]) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Update total badge count
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalCount > 0) {
+                cartBadge.innerText = totalCount;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+
+            // Render items list
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fa-solid fa-basket-shopping text-5xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500 text-sm">Giỏ hàng của bạn đang trống</p>
+                    </div>
+                `;
+            } else {
+                cartItemsContainer.innerHTML = cart.map((item, index) => `
+                    <div class="flex gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100 relative">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-lg flex-shrink-0">
+                        <div class="flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-800 line-clamp-1">${item.name}</h4>
+                                <span class="text-xs text-gray-500">Size: ${item.size}</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-sm font-bold text-brand-500">${formatPrice(item.price)}</span>
+                                <div class="flex items-center border border-gray-200 bg-white rounded-lg">
+                                    <button onclick="changeQuantity(${index}, -1)" class="px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-100">-</button>
+                                    <span class="px-2 text-xs font-semibold">${item.quantity}</span>
+                                    <button onclick="changeQuantity(${index}, 1)" class="px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-100">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500 text-xs p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // Calculate total price
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotalEl.innerText = formatPrice(totalPrice);
+        }
+
+        function openCart() {
+            cartDrawer.classList.remove('pointer-events-none');
+            cartBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+            cartPanel.classList.remove('translate-x-full');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeCart() {
+            cartBackdrop.classList.add('opacity-0', 'pointer-events-none');
+            cartPanel.classList.add('translate-x-full');
+            setTimeout(() => {
+                cartDrawer.classList.add('pointer-events-none');
+                document.body.classList.remove('modal-active');
+            }, 300);
+        }
+
+        // PRODUCT DETAIL MODAL
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            modalBody.innerHTML = `
+                <div class="aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase text-brand-500 tracking-wider">Hàng mới về</span>
+                        <h2 class="text-2xl font-bold font-serif text-gray-900 mt-1 mb-2">${product.name}</h2>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="flex text-amber-400 text-xs">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="text-xs text-gray-500">(${product.rating} Đánh giá)</span>
+                        </div>
+                        <div class="text-2xl font-bold text-brand-500 mb-4">
+                            ${formatPrice(product.price)}
+                            ${product.oldPrice ? `<span class="text-sm text-gray-400 line-through ml-2 font-normal">${formatPrice(product.oldPrice)}</span>` : ''}
+                        </div>
+                        <p class="text-sm text-gray-600 mb-6 leading-relaxed">${product.description}</p>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-6">
+                            <label class="block text-xs font-semibold uppercase text-gray-700 mb-2">Chọn Kích Thước (Size)</label>
+                            <div class="flex gap-2" id="modal-size-options">
+                                ${product.sizes.map((s, idx) => `
+                                    <button class="size-btn ${idx === 0 ? 'bg-brand-900 text-white' : 'bg-gray-100 text-gray-700'} w-10 h-10 rounded-lg font-semibold text-xs hover:bg-brand-900 hover:text-white transition-colors">
+                                        ${s}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="addToCart(${product.id}); closeProductModal();" 
+                            class="w-full py-3.5 bg-brand-500 hover:bg-brand-800 text-white font-semibold rounded-full shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
+                    </button>
+                </div>
+            `;
+
+            // Size button selection toggle logic
+            setTimeout(() => {
+                const sizeBtns = document.querySelectorAll('#modal-size-options .size-btn');
+                sizeBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        sizeBtns.forEach(b => {
+                            b.classList.remove('bg-brand-900', 'text-white');
+                            b.classList.add('bg-gray-100', 'text-gray-700');
+                        });
+                        btn.classList.add('bg-brand-900', 'text-white');
+                        btn.classList.remove('bg-gray-100', 'text-gray-700');
+                    });
+                });
+            }, 50);
+
+            productModal.classList.remove('opacity-0', 'pointer-events-none');
+            productModalContent.classList.remove('scale-95');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeProductModal() {
+            productModal.classList.add('opacity-0', 'pointer-events-none');
+            productModalContent.classList.add('scale-95');
+            document.body.classList.remove('modal-active');
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-gray-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-gray-700 transition-all duration-300 transform translate-y-2 opacity-0';
+            toast.innerHTML = `
+                <i class="fa-solid fa-circle-check text-green-400"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // EVENT LISTENERS INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Cart Drawer events
+            document.getElementById('open-cart-btn').addEventListener('click', openCart);
+            document.getElementById('close-cart-btn').addEventListener('click', closeCart);
+            cartBackdrop.addEventListener('click', closeCart);
+
+            // Modal events
+            document.getElementById('close-modal-btn').addEventListener('click', closeProductModal);
+            productModal.addEventListener('click', (e) => {
+                if (e.target === productModal) closeProductModal();
+            });
+
+            // Search inputs
+            const searchInput = document.getElementById('search-input');
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+
+            const handleSearch = (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            };
+
+            searchInput.addEventListener('input', handleSearch);
+            mobileSearchInput.addEventListener('input', handleSearch);
+
+            // Category Filter Buttons
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('bg-brand-900', 'text-white', 'active');
+                        b.classList.add('text-gray-600', 'hover:bg-gray-100');
+                    });
+                    btn.classList.add('bg-brand-900', 'text-white', 'active');
+                    btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+
+                    activeCategory = btn.dataset.category;
+                    renderProducts();
+                });
+            });
+
+            // Price Range Slider Filter
+            priceRange.addEventListener('input', (e) => {
+                maxPrice = parseInt(e.target.value);
+                priceVal.innerText = formatPrice(maxPrice);
+                renderProducts();
+            });
+
+            // Sorting Select Dropdown
+            sortSelect.addEventListener('change', (e) => {
+                sortBy = e.target.value;
+                renderProducts();
+            });
+
+            // Reset Filters
+            const resetFilterBtn = document.getElementById('reset-filter-btn');
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+
+            const resetAllFilters = () => {
+                activeCategory = 'all';
+                searchQuery = '';
+                maxPrice = 2000000;
+                sortBy = 'default';
+
+                searchInput.value = '';
+                mobileSearchInput.value = '';
+                priceRange.value = 2000000;
+                priceVal.innerText = formatPrice(2000000);
+                sortSelect.value = 'default';
+
+                categoryBtns.forEach((b, idx) => {
+                    if (idx === 0) {
+                        b.classList.add('bg-brand-900', 'text-white', 'active');
+                        b.classList.remove('text-gray-600');
+                    } else {
+                        b.classList.remove('bg-brand-900', 'text-white', 'active');
+                        b.classList.add('text-gray-600');
+                    }
+                });
+
+                renderProducts();
+            };
+
+            resetFilterBtn.addEventListener('click', resetAllFilters);
+            clearSearchBtn.addEventListener('click', resetAllFilters);
+
+            // Checkout Button Simulation
+            document.getElementById('checkout-btn').addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showToast('Giỏ hàng của bạn đang trống!');
+                    return;
+                }
+                alert('Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đang được xử lý.');
+                cart = [];
+                updateCartUI();
+                closeCart();
+            });
+        });
+    </script>
+</body>
+</html>
